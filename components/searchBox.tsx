@@ -1,10 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 
-export default function SearchInput({ searchTerm, setSearchTerm }:any) {
+interface SearchInputProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+}
+
+export default function SearchInput({ searchTerm, setSearchTerm }: SearchInputProps) {
   // Listen for the "Ctrl + K" shortcut
   useEffect(() => {
-    const handleShortcut = (e: { ctrlKey: any; metaKey: any; key: string; preventDefault: () => void; }) => {
+    const handleShortcut = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         document.getElementById("search-input")?.focus();

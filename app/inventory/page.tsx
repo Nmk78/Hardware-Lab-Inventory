@@ -185,11 +185,11 @@ export default function InventoryPage() {
     currentPage * itemsPerPage
   );
 
-  const stats = {
-    total: inventoryItems.length,
-    leased: leasingItems.length,
-    error: inventoryItems.filter((item) => item.status === "In Repair").length,
-  };
+  // const stats = {
+  //   total: inventoryItems.length,
+  //   leased: leasingItems.length,
+  //   error: inventoryItems.filter((item) => item.status === "In Repair").length,
+  // };
 
   useEffect(() => {
     let filtered = initialInventoryItems;
@@ -220,7 +220,7 @@ export default function InventoryPage() {
 
   const submitLease = () => {
     if (selectedItem && borrower && dueDate) {
-      const newLeasingItem = {
+      const newLeasingItem: LeasingItem = {
         id: leasingItems.length + 1,
         itemId: selectedItem.id,
         name: selectedItem.name,
@@ -268,7 +268,7 @@ export default function InventoryPage() {
   const handleSubmitItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const newItem = {
+    const newItem: InventoryItem = {
       id: editingItem ? editingItem.id : inventoryItems.length + 1,
       name: formData.get("name") as string,
       category: formData.get("category") as string,

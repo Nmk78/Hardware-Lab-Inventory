@@ -91,7 +91,7 @@ import { useToast } from '@/hooks/use-toast'
 export default function InviteUserPage() {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
