@@ -4,13 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Package,
-  PlusCircle,
-  Clock,
-  AlertCircle,
-  UserPlus,
+  Package, UserPlus,
   CircuitBoard,
-  ChevronsRightLeft,
+  ChevronsRightLeft
 } from "lucide-react";
 import {
   Sidebar as ShadcnSidebar,

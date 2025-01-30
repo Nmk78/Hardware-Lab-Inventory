@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Table,
@@ -17,16 +17,14 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+  SheetTitle
 } from "@/components/ui/sheet";
 import {
   Select,
@@ -35,24 +33,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
+  PaginationContent, PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 } from "@/components/ui/pagination";
 import { useToast } from "@/hooks/use-toast";
 import SearchInput from "@/components/searchBox";
 
+interface InventoryItem {
+  id: number;
+  name: string;
+  category: string;
+  quantity: number;
+  status: string;
+  tags: string[];
+}
+
+interface LeasingItem {
+  id: number;
+  itemId: number;
+  name: string;
+  borrower: string;
+  dueDate: string;
+}
+
 // Mock data - in a real app, this would come from your backend
-const initialInventoryItems = [
+const initialInventoryItems: InventoryItem[] = [
   {
     id: 1,
     name: "Laptop",
@@ -112,7 +123,7 @@ const initialInventoryItems = [
   })),
 ];
 
-const initialLeasingItems = [
+const initialLeasingItems: LeasingItem[] = [
   {
     id: 1,
     itemId: 2,
@@ -144,17 +155,17 @@ const initialLeasingItems = [
 ];
 
 export default function InventoryPage() {
-  const [inventoryItems, setInventoryItems] = useState(initialInventoryItems);
-  const [leasingItems, setLeasingItems] = useState(initialLeasingItems);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState(false);
-  const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [borrower, setBorrower] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [editingItem, setEditingItem] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState("all");
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(initialInventoryItems);
+  const [leasingItems, setLeasingItems] = useState<LeasingItem[]>(initialLeasingItems);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState<boolean>(false);
+  const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [borrower, setBorrower] = useState<string>("");
+  const [dueDate, setDueDate] = useState<string>("");
+  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<string>("all");
   const searchParams = useSearchParams();
   const tagFilter = searchParams.get("tag");
   const { toast } = useToast();
@@ -202,7 +213,7 @@ export default function InventoryPage() {
     setCurrentPage(1);
   }, [searchTerm, tagFilter]);
 
-  const handleLease = (item) => {
+  const handleLease = (item: InventoryItem) => {
     setSelectedItem(item);
     setIsLeaseDialogOpen(true);
   };
@@ -232,7 +243,7 @@ export default function InventoryPage() {
     }
   };
 
-  const isOverdue = (dueDate) => {
+  const isOverdue = (dueDate: string) => {
     return new Date(dueDate) < new Date();
   };
 
@@ -241,12 +252,12 @@ export default function InventoryPage() {
     setIsAddEditSheetOpen(true);
   };
 
-  const handleEditItem = (item) => {
+  const handleEditItem = (item: InventoryItem) => {
     setEditingItem(item);
     setIsAddEditSheetOpen(true);
   };
 
-  const handleDeleteItem = (itemId) => {
+  const handleDeleteItem = (itemId: number) => {
     setInventoryItems(inventoryItems.filter((item) => item.id !== itemId));
     toast({
       title: "Item Deleted",
@@ -254,17 +265,16 @@ export default function InventoryPage() {
     });
   };
 
-  const handleSubmitItem = (e) => {
+  const handleSubmitItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.target as HTMLFormElement);
     const newItem = {
       id: editingItem ? editingItem.id : inventoryItems.length + 1,
-      name: formData.get("name"),
-      category: formData.get("category"),
-      quantity: parseInt(formData.get("quantity")),
-      status: formData.get("status"),
-      tags: formData
-        .get("tags")
+      name: formData.get("name") as string,
+      category: formData.get("category") as string,
+      quantity: parseInt(formData.get("quantity") as string),
+      status: formData.get("status") as string,
+      tags: (formData.get("tags") as string)
         .split(",")
         .map((tag) => tag.trim()),
     };

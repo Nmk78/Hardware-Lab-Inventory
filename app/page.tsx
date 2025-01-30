@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, Plus, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 // import {
 //   BarChart,
 //   Bar,
@@ -22,15 +21,15 @@ const dashboardData = {
   overdueItems: 3,
 };
 
-const monthlyData = [
-  { name: "Jan", total: 120 },
-  { name: "Feb", total: 132 },
-  { name: "Mar", total: 101 },
-  { name: "Apr", total: 134 },
-  { name: "May", total: 156 },
-  { name: "Jun", total: 180 },
-  { name: "Jul", total: 201 },
-];
+// const monthlyData = [
+//   { name: "Jan", total: 120 },
+//   { name: "Feb", total: 132 },
+//   { name: "Mar", total: 101 },
+//   { name: "Apr", total: 134 },
+//   { name: "May", total: 156 },
+//   { name: "Jun", total: 180 },
+//   { name: "Jul", total: 201 },
+// ];
 
 export default function DashboardPage() {
   return (
