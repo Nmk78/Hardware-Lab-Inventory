@@ -157,7 +157,7 @@ const initialLeasingItems: LeasingItem[] = [
 export default function InventoryPage() {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(initialInventoryItems);
   const [leasingItems, setLeasingItems] = useState<LeasingItem[]>(initialLeasingItems);
-  const [searchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState<boolean>(false);
   const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
