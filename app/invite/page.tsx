@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ export default function InviteUserPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -25,7 +25,7 @@ export default function InviteUserPage() {
         body: JSON.stringify({ email, role }),
       });
 
-      const result = await response.json();
+      const result: { message: string } = await response.json();
 
       if (response.ok) {
         toast({
@@ -37,7 +37,7 @@ export default function InviteUserPage() {
       } else {
         throw new Error(result.message);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An unexpected error occurred",
@@ -71,7 +71,7 @@ export default function InviteUserPage() {
                 required
                 placeholder="Email address"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 disabled={isLoading}
               />
             </div>
@@ -86,7 +86,7 @@ export default function InviteUserPage() {
                 required
                 placeholder="Role"
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setRole(e.target.value)}
                 disabled={isLoading}
               />
             </div>

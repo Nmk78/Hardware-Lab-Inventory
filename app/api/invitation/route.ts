@@ -42,14 +42,15 @@ export async function POST(req: NextRequest) {
       message: "Invitation sent successfully",
       result: response.data,
     });
-  } catch (error:any) {
-    console.error("🚀 ~ POST ~ Clerk API Error:", error.response?.data);
+    } catch (error) {
+    const err = error as any;
+    console.error("🚀 ~ POST ~ Clerk API Error:", err.response?.data);
     return NextResponse.json(
       {
-        message: error.response?.data?.message || "Unknown error",
-        details: error.response?.data,
+      message: err.response?.data?.message || "Unknown error",
+      details: err.response?.data,
       },
-      { status: error.response?.status || 500 }
+      { status: err.response?.status || 500 }
     );
-  }
+    }
 }
