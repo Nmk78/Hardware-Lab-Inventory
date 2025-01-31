@@ -17,14 +17,14 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle
+  SheetTitle,
 } from "@/components/ui/sheet";
 import {
   Select,
@@ -37,13 +37,17 @@ import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Pagination,
-  PaginationContent, PaginationItem,
+  PaginationContent,
+  PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious
+  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useToast } from "@/hooks/use-toast";
 import SearchInput from "@/components/searchBox";
+import CategoryForm from "@/components/categoryForm";
+import ProductForm from "@/components/productForm";
+import ItemForm from "@/components/itemForm";
 
 interface InventoryItem {
   id: number;
@@ -155,8 +159,11 @@ const initialLeasingItems: LeasingItem[] = [
 ];
 
 export default function InventoryPage() {
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(initialInventoryItems);
-  const [leasingItems, setLeasingItems] = useState<LeasingItem[]>(initialLeasingItems);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(
+    initialInventoryItems
+  );
+  const [leasingItems, setLeasingItems] =
+    useState<LeasingItem[]>(initialLeasingItems);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState<boolean>(false);
   const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState<boolean>(false);
@@ -305,6 +312,9 @@ export default function InventoryPage() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Inventory</h1>
+        <Button onClick={handleAddItem}>
+          <PlusCircle className="mr-2 h-4 w-4" /> Add Category
+        </Button>
         <Button onClick={handleAddItem}>
           <PlusCircle className="mr-2 h-4 w-4" /> Add Item
         </Button>
@@ -497,64 +507,9 @@ export default function InventoryPage() {
               {editingItem ? "Edit Item" : "Add New Item"}
             </SheetTitle>
           </SheetHeader>
-          <form onSubmit={handleSubmitItem} className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                name="name"
-                defaultValue={editingItem?.name}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                name="category"
-                defaultValue={editingItem?.category}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="quantity">Quantity</Label>
-              <Input
-                id="quantity"
-                name="quantity"
-                type="number"
-                defaultValue={editingItem?.quantity}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="status">Status</Label>
-              <Select
-                name="status"
-                defaultValue={editingItem?.status || "Available"}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Available">Available</SelectItem>
-                  <SelectItem value="In Use">In Use</SelectItem>
-                  <SelectItem value="In Repair">In Repair</SelectItem>
-                  <SelectItem value="Leased">Leased</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="tags">Tags (comma-separated)</Label>
-              <Input
-                id="tags"
-                name="tags"
-                defaultValue={editingItem?.tags.join(", ")}
-              />
-            </div>
-            <Button type="submit">
-              {editingItem ? "Update Item" : "Add Item"}
-            </Button>
-          </form>
+          {/* <CategoryForm /> */}
+          {/* <ProductForm/> */}
+          <ItemForm/>
         </SheetContent>
       </Sheet>
     </div>
