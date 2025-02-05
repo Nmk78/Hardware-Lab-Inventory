@@ -1,18 +1,34 @@
-"use client";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Select } from "./ui/select";
-import { Checkbox } from "./ui/checkbox";
-
-interface Field {
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+export interface Field {
   name: string;
-  type: string;
+  type: "text" | "number" | "select";
   required: boolean;
 }
 
-export default function CategoryForm() {
+export interface Category {
+  name: string;
+  fields: Field[];
+}
+
+interface CategoryFormProps {
+  onSave: (category: Omit<Category, "id">) => void;
+}
+
+export function CategoryForm({ onSave }: CategoryFormProps) {
   const [fields, setFields] = useState<Field[]>([]);
+  const [categoryName, setCategoryName] = useState("");
 
   const addField = () => {
     setFields([...fields, { name: "", type: "text", required: false }]);
@@ -20,52 +36,75 @@ export default function CategoryForm() {
 
   const updateField = (index: number, key: keyof Field, value: any) => {
     const updated = [...fields];
-    //@ts-expect-error
-    updated[index][key] = value;
+    updated[index] = { ...updated[index], [key]: value };
     setFields(updated);
   };
 
-  const saveCategory = async () => {
-    await fetch("/api/category", {
-      method: "POST",
-      body: JSON.stringify({ name: "Electronics", fields }),
-    });
+  const saveCategory = () => {
+    onSave({ name: categoryName, fields });
+    setCategoryName("");
+    setFields([]);
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Create Category</h2>
-      <Button onClick={addField} className="mb-4">+ Add Field</Button>
-      {fields.map((field, i) => (
-        <div key={i} className="mb-4">
-          <Input
-            type="text"
-            placeholder="Field Name"
-            value={field.name}
-            onChange={(e) => updateField(i, "name", e.target.value)}
-            className="mb-2"
-          />
-          <Select
-            value={field.type}
-            //@ts-ignore
-            onChange={(e) => updateField(i, "type", e.target.value)}
-            className="mb-2"
-          >
-            <option value="text">Text</option>
-            <option value="number">Number</option>
-            <option value="select">Select</option>
-          </Select>
-          <Checkbox
-            checked={field.required}
-            //@ts-ignore
-            onChange={(e) => updateField(i, "required", e.target.checked)}
-            className="mb-2"
-          >
-            Required
-          </Checkbox>
+    <Card>
+      <CardHeader>
+        <CardTitle>Create New Category</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="categoryName">Category Name</Label>
+            <Input
+              id="categoryName"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter category name"
+            />
+          </div>
+          <Button onClick={addField} variant="outline">
+            + Add Field
+          </Button>
+          {fields.map((field, i) => (
+            <div key={i} className="space-y-2">
+              <div className=" flex">
+                <Input
+                  className="rounded-r-none"
+                  placeholder="Field Name"
+                  value={field.name}
+                  onChange={(e) => updateField(i, "name", e.target.value)}
+                />
+                <Select
+                  value={field.type}
+                  onValueChange={(value) => updateField(i, "type", value)}
+                >
+                  <SelectTrigger className="rounded-l-none w-1/3" >
+                    <SelectValue
+                      placeholder="Select field type"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="number">Number</SelectItem>
+                    <SelectItem value="select">Select</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id={`required-${i}`}
+                  checked={field.required}
+                  onCheckedChange={(checked) =>
+                    updateField(i, "required", checked as boolean)
+                  }
+                />
+                <Label htmlFor={`required-${i}`}>Required</Label>
+              </div>
+            </div>
+          ))}
+          <Button onClick={saveCategory}>Save Category</Button>
         </div>
-      ))}
-      <Button onClick={saveCategory}>Save Category</Button>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

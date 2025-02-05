@@ -16,6 +16,8 @@ const Table = React.forwardRef<
 ))
 Table.displayName = "Table"
 
+// TODO only show general data and show details while expands
+
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>

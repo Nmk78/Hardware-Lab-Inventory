@@ -6,7 +6,8 @@ import {
   LayoutDashboard,
   Package, UserPlus,
   CircuitBoard,
-  ChevronsRightLeft
+  ChevronsRightLeft,
+  Wrench
 } from "lucide-react";
 import {
   Sidebar as ShadcnSidebar,
@@ -24,7 +25,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 const menuItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
-  // { name: 'Add Item', href: '/add-item', icon: PlusCircle },
+  { name: 'Project', href: '/add-item', icon: Wrench },
   { name: "Invite User", href: "/invite", icon: UserPlus },
 ];
 

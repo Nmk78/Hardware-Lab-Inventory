@@ -45,9 +45,9 @@ import {
 } from "@/components/ui/pagination";
 import { useToast } from "@/hooks/use-toast";
 import SearchInput from "@/components/searchBox";
-import CategoryForm from "@/components/categoryForm";
-import ProductForm from "@/components/productForm";
-import ItemForm from "@/components/itemForm";
+
+import ItemForm from "@/components/ItemForm";
+import { AnimatedTableRow } from "@/components/AnimatedTableRow";
 
 interface InventoryItem {
   id: number;
@@ -133,7 +133,7 @@ const initialLeasingItems: LeasingItem[] = [
     itemId: 2,
     name: "Projector",
     borrower: "John Doe",
-    dueDate: "2023-07-15",
+    dueDate: "2025-07-15",
   },
   {
     id: 2,
@@ -157,6 +157,10 @@ const initialLeasingItems: LeasingItem[] = [
     dueDate: "2023-06-22",
   },
 ];
+
+interface Item {
+  [key: string]: any;
+}
 
 export default function InventoryPage() {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(
@@ -312,12 +316,6 @@ export default function InventoryPage() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Inventory</h1>
-        <Button onClick={handleAddItem}>
-          <PlusCircle className="mr-2 h-4 w-4" /> Add Category
-        </Button>
-        <Button onClick={handleAddItem}>
-          <PlusCircle className="mr-2 h-4 w-4" /> Add Item
-        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -327,11 +325,19 @@ export default function InventoryPage() {
             <TabsTrigger value="all">All Items</TabsTrigger>
             <TabsTrigger value="leased">Leased Items</TabsTrigger>
           </TabsList>
-          <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <div className="flex space-x-2">
+            <SearchInput
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+            <Button onClick={handleAddItem}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Item
+            </Button>
+          </div>
         </div>
         <TabsContent value="all" className="space-y-4">
           <div className="rounded-md border">
-            <div className="max-h-[600px] overflow-y-auto">
+            <div className="max-h-[72vh] overflow-y-scroll">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -347,59 +353,72 @@ export default function InventoryPage() {
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className=" overflow-visible">
                   {paginatedItems.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell className="text-center">{item.name}</TableCell>
-                      <TableCell className="text-center">
-                        {item.category}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.status}
-                      </TableCell>
-                      <TableCell>
-                        <div className="truncate">
-                          <div className="flex flex-wrap gap-1">
-                            {item.tags.map((tag) => (
-                              <Tag key={tag} tag={tag} />
-                            ))}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.quantity}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.quantity}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.quantity}
-                      </TableCell>
-                      <TableCell className="text-right flex justify-end w-auto bg-white">
-                        <div className="flex space-x-2 ml-auto">
-                          <Button
-                            onClick={() => handleLease(item)}
-                            disabled={item.status !== "Available"}
-                          >
-                            Lease
-                          </Button>
-                          <Button
-                            onClick={() => handleEditItem(item)}
-                            variant="outline"
-                            size="icon"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            onClick={() => handleDeleteItem(item.id)}
-                            variant="outline"
-                            size="icon"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                    // <TableRow key={item.id}>
+                    //   <TableCell className="text-center">{item.name}</TableCell>
+                    //   <TableCell className="text-center">
+                    //     {item.category}
+                    //   </TableCell>
+                    //   <TableCell className="text-center">
+                    //     {item.status}
+                    //   </TableCell>
+                    //   <TableCell>
+                    //     <div className="truncate">
+                    //       <div className="flex flex-wrap gap-1">
+                    //         {item.tags.map((tag) => (
+                    //           <Tag key={tag} tag={tag} />
+                    //         ))}
+                    //       </div>
+                    //     </div>
+                    //   </TableCell>
+                    //   <TableCell className="text-center">
+                    //     {item.quantity}
+                    //   </TableCell>
+                    //   <TableCell className="text-center">
+                    //     {item.quantity}
+                    //   </TableCell>
+                    //   <TableCell className="text-center">
+                    //     {item.quantity}
+                    //   </TableCell>
+                    //   <TableCell className="text-right flex justify-end w-auto bg-white">
+                    //     <div className="flex space-x-2 ml-auto">
+                    //       <Button
+                    //         onClick={() => handleLease(item)}
+                    //         disabled={item.status !== "Available"}
+                    //       >
+                    //         Lease
+                    //       </Button>
+                    //       <Button
+                    //         onClick={() => handleEditItem(item)}
+                    //         variant="outline"
+                    //         size="icon"
+                    //       >
+                    //         <Pencil className="h-4 w-4" />
+                    //       </Button>
+                    //       <Button
+                    //         onClick={() => handleDeleteItem(item.id)}
+                    //         variant="outline"
+                    //         size="icon"
+                    //       >
+                    //         <Trash2 className="h-4 w-4" />
+                    //       </Button>
+                    //     </div>
+                    //   </TableCell>
+                    // </TableRow>
+                    <AnimatedTableRow
+                      key={item?.id}
+                      item={item}
+                      onLease={function (item: Item): void {
+                        throw new Error("Function not implemented.");
+                      }}
+                      onEdit={function (item: Item): void {
+                        throw new Error("Function not implemented.");
+                      }}
+                      onDelete={function (id: string): void {
+                        throw new Error("Function not implemented.");
+                      }}
+                    />
                   ))}
                 </TableBody>
               </Table>
@@ -509,7 +528,7 @@ export default function InventoryPage() {
           </SheetHeader>
           {/* <CategoryForm /> */}
           {/* <ProductForm/> */}
-          <ItemForm/>
+          <ItemForm />
         </SheetContent>
       </Sheet>
     </div>

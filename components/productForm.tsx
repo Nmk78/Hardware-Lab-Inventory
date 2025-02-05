@@ -1,123 +1,126 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Input } from "./ui/input";
-import { Select } from "./ui/select";
-import { Checkbox } from "./ui/checkbox";
-import { Button } from "./ui/button";
-// Define the Category type
-type Category = {
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Plus, PlusCircle } from "lucide-react";
+export interface Field {
+  name: string;
+  type: string;
+  required: boolean;
+}
+
+export interface Category {
   id: string;
   name: string;
-  fields: { label: string; type: string }[];
-};
+  fields: Field[];
+}
 
-// Define the dynamic form schema
-const getProductSchema = (fields: { label: string; type: string }[]) =>
+export interface ProductFormValues {
+  name: string;
+  categoryId: string;
+  attributes: Record<string, string>;
+}
+
+interface ProductFormProps {
+  categories: Category[];
+  onSubmit: (data: ProductFormValues) => void;
+  setShowCategoryForm: (show: boolean) => void;
+}
+
+const getProductSchema = (fields: { name: string; type: string }[]) =>
   z.object({
     name: z.string().min(2, "Product name is required"),
     categoryId: z.string().min(1, "Category is required"),
     attributes: z.record(z.string().optional()),
   });
 
-type ProductFormValues = {
-  name: string;
-  categoryId: string;
-  attributes: Record<string, string>;
-};
-
-export default function ProductForm() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-
-  // Fetch categories
-  useEffect(() => {
-    axios.get("/api/categories").then((res) => setCategories(res.data));
-  }, []);
-
-  // Create form instance
+export function ProductForm({
+  categories,
+  onSubmit,
+  setShowCategoryForm,
+}: ProductFormProps) {
   const {
     register,
     handleSubmit,
-    watch,
     control,
-    reset,
+    watch,
     formState: { errors },
   } = useForm<ProductFormValues>({
-    resolver: zodResolver(getProductSchema(selectedCategory?.fields || [])),
+    resolver: zodResolver(getProductSchema([])),
     defaultValues: { name: "", categoryId: "", attributes: {} },
   });
 
-  // Watch category selection
   const selectedCategoryId = watch("categoryId");
-
-  // Update selected category when category changes
-  useEffect(() => {
-    const category = categories.find((cat) => cat.id === selectedCategoryId);
-    setSelectedCategory(category || null);
-    reset({ name: "", categoryId: selectedCategoryId, attributes: {} });
-  }, [selectedCategoryId, categories, reset]);
-
-  // Submit handler
-  const onSubmit = async (data: ProductFormValues) => {
-    console.log("Submitting:", data);
-    try {
-      await axios.post("/api/products", data);
-      alert("Product created successfully!");
-    } catch (error) {
-      console.error("Error creating product:", error);
-      alert("Failed to create product.");
-    }
-  };
+  const selectedCategory = categories.find(
+    (cat) => cat.id === selectedCategoryId
+  );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4 border rounded shadow">
-      {/* Product Name */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Product Name</label>
-        <Input
-          {...register("name")}
-          className="w-full p-2 border rounded"
-          placeholder="Enter product name"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Product Name</Label>
+        <Input id="name" {...register("name")} />
+        {errors.name && (
+          <p className="text-sm text-destructive">{errors.name.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <Label htmlFor="categoryId">Category</Label>
+          <Button onClick={() => setShowCategoryForm(true)} variant="outline" size="sm">
+            <Plus/>New
+          </Button>
+        </div>
+        <Controller
+          name="categoryId"
+          control={control}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {errors.categoryId && (
+          <p className="text-sm text-destructive">
+            {errors.categoryId.message}
+          </p>
+        )}
       </div>
 
-      {/* Category Selection */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Category</label>
-        <Select {...register("categoryId")}>
-        {/* <Select {...register("categoryId")} className="w-full p-2 border rounded"> */}
-          <option value="">Select a category</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </Select>
-        {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId.message}</p>}
-      </div>
-
-      {/* Dynamic Fields */}
       {selectedCategory && (
-        <div className="mb-4">
-          <h3 className="font-semibold mb-2">Attributes</h3>
+        <div className="space-y-4">
+          <h3 className="font-semibold">Attributes</h3>
           {selectedCategory.fields.map((field, index) => (
-            <div key={index} className="mb-2">
-              <label className="block text-sm font-medium mb-2">{field.label}</label>
+            <div key={index} className="space-y-2">
+              <Label htmlFor={`attributes.${field.name}`}>{field.name}</Label>
               <Controller
-                name={`attributes.${field.label}` as const}
+                name={`attributes.${field.name}` as const}
                 control={control}
                 render={({ field: inputProps }) => (
                   <Input
+                    id={`attributes.${field.name}`}
                     {...inputProps}
-                    className="w-full p-2 border rounded"
                     type={field.type}
-                    placeholder={`Enter ${field.label}`}
+                    placeholder={`Enter ${field.name}`}
                   />
                 )}
               />
@@ -126,10 +129,7 @@ export default function ProductForm() {
         </div>
       )}
 
-      {/* Submit Button */}
-      <Button type="submit" className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
-        Create Product
-      </Button>
+      <Button type="submit">Create Product</Button>
     </form>
   );
 }

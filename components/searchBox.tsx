@@ -6,6 +6,7 @@ interface SearchInputProps {
   setSearchTerm: (term: string) => void;
 }
 
+//TODO Filter
 export default function SearchInput({ searchTerm, setSearchTerm }: SearchInputProps) {
   // Listen for the "Ctrl + K" shortcut
   useEffect(() => {
