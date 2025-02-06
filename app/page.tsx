@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, Plus, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 // import {
 //   BarChart,
 //   Bar,
@@ -31,12 +32,15 @@ const dashboardData = {
 //   { name: "Jul", total: 201 },
 // ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const {sessionClaims} = await auth()
+  console.log("🚀 ~ DashboardPage ~ sessionClaims:", sessionClaims?.role)
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex justify-center items-center">
           <h1 className="text-2xl font-bold">Dashboard</h1>
+          {/* <h1 className="text-2xl font-bold">{}</h1> */}
         </div>
         <div className="space-x-2">
           <Button asChild>
@@ -83,4 +87,8 @@ export default function DashboardPage() {
       </Card>
     </div>
   );
+          console.log("🚀 ~ DashboardPage ~ sessionClaims:", sessionClaims)
+          console.log("🚀 ~ DashboardPage ~ sessionClaims:", sessionClaims)
+          console.log("🚀 ~ DashboardPage ~ sessionClaims:", sessionClaims)
+          console.log("🚀 ~ DashboardPage ~ sessionClaims:", sessionClaims)
 }
