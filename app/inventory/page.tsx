@@ -38,28 +38,12 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import SearchInput from "@/components/searchBox";
 
-import ItemForm from "@/components/ItemForm";
 import { AnimatedTableRow } from "@/components/AnimatedTableRow";
+import ItemForm from "@/components/ItemForm";
 
-interface InventoryItem {
-  id: number;
-  name: string;
-  category: string;
-  quantity: number;
-  status: string;
-  tags: string[];
-}
-
-interface LeasingItem {
-  id: number;
-  itemId: number;
-  name: string;
-  borrower: string;
-  dueDate: string;
-}
 
 // Mock data - in a real app, this would come from your backend
-const initialInventoryItems: InventoryItem[] = [
+const initialInventoryItems: Item[] = [
   {
     id: 1,
     name: "Laptop",
@@ -119,7 +103,7 @@ const initialInventoryItems: InventoryItem[] = [
   })),
 ];
 
-const initialLeasingItems: LeasingItem[] = [
+const initialLeasingItems: Item[] = [
   {
     id: 1,
     itemId: 2,
@@ -155,18 +139,18 @@ interface Item {
   [key: string]: unknown;
 }
 export default function InventoryPage() {
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(
+  const [inventoryItems, setInventoryItems] = useState<Item[]>(
     initialInventoryItems
   );
   const [leasingItems, setLeasingItems] =
-    useState<LeasingItem[]>(initialLeasingItems);
+    useState<Item[]>(initialLeasingItems);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState<boolean>(false);
   const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState<boolean>(false);
-  const [selectedItem] = useState<InventoryItem | null>(null);
+  const [selectedItem] = useState<Item | null>(null);
   const [borrower, setBorrower] = useState<string>("");
   const [dueDate, setDueDate] = useState<string>("");
-  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<string>("all");
   const searchParams = useSearchParams();
@@ -198,16 +182,16 @@ export default function InventoryPage() {
     let filtered = initialInventoryItems;
 
     if (tagFilter) {
-      filtered = filtered.filter((item) => item.tags.includes(tagFilter));
+      filtered = filtered.filter((item) => (item.tags as string[]).includes(tagFilter));
     }
 
     if (searchTerm) {
       filtered = filtered.filter(
         (item) =>
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.tags.some((tag) =>
-            tag.toLowerCase().includes(searchTerm.toLowerCase())
+          (item.name as string).toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (item.category as string).toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (item.tags as unknown[]).some((tag) =>
+            (tag as string).toLowerCase().includes(searchTerm.toLowerCase())
           )
       );
     }
@@ -216,14 +200,14 @@ export default function InventoryPage() {
     setCurrentPage(1);
   }, [searchTerm, tagFilter]);
 
-  // const handleLease = (item: InventoryItem) => {
+  // const handleLease = (item: Item) => {
   //   setSelectedItem(item);
   //   setIsLeaseDialogOpen(true);
   // };
 
   const submitLease = () => {
     if (selectedItem && borrower && dueDate) {
-      const newLeasingItem: LeasingItem = {
+      const newLeasingItem: Item = {
         id: leasingItems.length + 1,
         itemId: selectedItem.id,
         name: selectedItem.name,
@@ -255,7 +239,7 @@ export default function InventoryPage() {
     setIsAddEditSheetOpen(true);
   };
 
-  // const handleEditItem = (item: InventoryItem) => {
+  // const handleEditItem = (item: Item) => {
   //   setEditingItem(item);
   //   setIsAddEditSheetOpen(true);
   // };
@@ -271,7 +255,7 @@ export default function InventoryPage() {
   // const handleSubmitItem = (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
   //   const formData = new FormData(e.target as HTMLFormElement);
-  //   const newItem: InventoryItem = {
+  //   const newItem: Item = {
   //     id: editingItem ? editingItem.id : inventoryItems.length + 1,
   //     name: formData.get("name") as string,
   //     category: formData.get("category") as string,
@@ -399,7 +383,7 @@ export default function InventoryPage() {
                     //   </TableCell>
                     // </TableRow>
                     <AnimatedTableRow
-                      key={item?.id}
+                      key={item?.id as string}
                       item={item}
                       onLease={function (item: Item): void {
                         console.log("🚀 ~ InventoryPage ~ item:", item)
@@ -464,14 +448,14 @@ export default function InventoryPage() {
               <TableBody>
                 {leasingItems.map((item) => (
                   <TableRow
-                    key={item.id}
-                    className={isOverdue(item.dueDate) ? "bg-red-100" : ""}
+                    key={item.id as string}
+                    className={isOverdue(item.dueDate as string) ? "bg-red-100" : ""}
                   >
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.borrower}</TableCell>
-                    <TableCell>{item.dueDate}</TableCell>
+                    <TableCell>{item.name as string}</TableCell>
+                    <TableCell>{item.borrower as string}</TableCell>
+                    <TableCell>{item.dueDate as string}</TableCell>
                     <TableCell>
-                      {isOverdue(item.dueDate) ? "Overdue" : "On Time"}
+                      {isOverdue(item.dueDate as string) ? "Overdue" : "On Time"}
                     </TableCell>
                   </TableRow>
                 ))}

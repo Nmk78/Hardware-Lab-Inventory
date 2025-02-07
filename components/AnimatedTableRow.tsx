@@ -39,21 +39,21 @@ export function AnimatedTableRow({
           ${isExpanded ? "bg-gray-100 border-b-0" : ""}
         `}
       >
-        <TableCell className="text-center">{item.name}</TableCell>
-        <TableCell className="text-center">{item.category}</TableCell>
-        <TableCell className="text-center">{item.status}</TableCell>
+        <TableCell className="text-center">{item.name as string}</TableCell>
+        <TableCell className="text-center">{item.category as string}</TableCell>
+        <TableCell className="text-center">{item.status as string}</TableCell>
         <TableCell>
           <div className="truncate">
             <div className="flex flex-wrap gap-1">
-              {item.tags.map((tag: string, idx: number) => (
+              {(item.tags as unknown[]).map((tag: string, idx: number) => (
                 <Tag key={idx} tag={tag} />
               ))}
             </div>
           </div>
         </TableCell>
-        <TableCell className="text-center">{item.quantity}</TableCell>
-        <TableCell className="text-center">{item.quantity}</TableCell>
-        <TableCell className="text-center">{item.quantity}</TableCell>
+        <TableCell className="text-center">{item.quantity as string}</TableCell>
+        <TableCell className="text-center">{item.quantity as string}</TableCell>
+        <TableCell className="text-center">{item.quantity as string}</TableCell>
         <TableCell className="text-right flex justify-end w-auto bg-white">
           <div className="flex space-x-2 ml-auto">
             <Button
@@ -81,7 +81,7 @@ export function AnimatedTableRow({
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                onDelete(item.id);
+                onDelete(item.id as string);
               }}
               variant="outline"
               size="sm"
@@ -107,15 +107,15 @@ export function AnimatedTableRow({
               <div className="p-4 flex gap-4 items-start">
                 <Image
                   width={100}
-                  src={`/images/${item.name.toLowerCase()}.jpg`}
-                  alt={item.name}
+                  src={`/images/${(item.name as string).toLowerCase()}.jpg`}
+                  alt={item.name as string}
                   className="w-32 h-32 object-cover rounded-lg shadow-md
                            transition-transform duration-300 hover:scale-105"
                 />
                 <div className="flex flex-col space-y-2 opacity-0 animate-in fade-in duration-500">
                   <p>
                     <strong>Description:</strong> Detailed description of{" "}
-                    {item.name}.
+                    {item.name as string}.
                   </p>
                   <p>
                     <strong>Additional Info:</strong> Any other relevant
@@ -124,15 +124,15 @@ export function AnimatedTableRow({
                   <div className="flex flex-wrap gap-2">
                     <div className="flex items-center">
                       <strong>Price:</strong>
-                      <span className="ml-1">${item.price}</span>
+                      <span className="ml-1">${item.price as string}</span>
                     </div>
                     <div className="flex items-center">
                       <strong>Location:</strong>
-                      <span className="ml-1">{item.location}</span>
+                      <span className="ml-1">{item.location as string}</span>
                     </div>
                     <div className="flex items-center">
                       <strong>Condition:</strong>
-                      <span className="ml-1">{item.condition}</span>
+                      <span className="ml-1">{item.condition as string}</span>
                     </div>
                   </div>
                 </div>
