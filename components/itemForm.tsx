@@ -5,7 +5,6 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { CategoryForm } from "./CategoryForm";
 import { ProductForm } from "./ProductForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 export interface Field {
   name: string;

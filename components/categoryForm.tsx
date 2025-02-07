@@ -34,7 +34,7 @@ export function CategoryForm({ onSave }: CategoryFormProps) {
     setFields([...fields, { name: "", type: "text", required: false }]);
   };
 
-  const updateField = (index: number, key: keyof Field, value: any) => {
+  const updateField = (index: number, key: keyof Field, value: string | boolean) => {
     const updated = [...fields];
     updated[index] = { ...updated[index], [key]: value };
     setFields(updated);

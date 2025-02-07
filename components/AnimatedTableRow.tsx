@@ -8,7 +8,7 @@ import { Tag } from "./tag";
 import Image from "next/image";
 
 interface Item {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AnimatedTableRowProps {
@@ -105,7 +105,8 @@ export function AnimatedTableRow({
           >
             <div className="overflow-hidden">
               <div className="p-4 flex gap-4 items-start">
-                <img
+                <Image
+                  width={100}
                   src={`/images/${item.name.toLowerCase()}.jpg`}
                   alt={item.name}
                   className="w-32 h-32 object-cover rounded-lg shadow-md

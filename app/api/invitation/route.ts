@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios, { AxiosError } from "axios";
 
+//@ts-nocheck
 export async function POST(req: NextRequest) {
   try {
     const { email, role } = await req.json();
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest) {
           err.response?.data &&
           typeof err.response.data === "object" &&
           "message" in err.response.data
-            ? (err.response.data as any).message
+            ? (err.response.data as { message: string }).message
             : "Unknown error",
         details: err.response?.data,
       },

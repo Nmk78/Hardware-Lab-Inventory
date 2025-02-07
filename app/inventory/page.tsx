@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Table,
@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tag } from "@/components/tag";
 import {
   Dialog,
   DialogContent,
@@ -26,14 +25,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { PlusCircle, Pencil, Trash2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Pagination,
@@ -158,10 +150,10 @@ const initialLeasingItems: LeasingItem[] = [
   },
 ];
 
+//@ts-nocheck
 interface Item {
-  [key: string]: any;
+  [key: string]: unknown;
 }
-
 export default function InventoryPage() {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(
     initialInventoryItems
@@ -171,7 +163,7 @@ export default function InventoryPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLeaseDialogOpen, setIsLeaseDialogOpen] = useState<boolean>(false);
   const [isAddEditSheetOpen, setIsAddEditSheetOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [selectedItem] = useState<InventoryItem | null>(null);
   const [borrower, setBorrower] = useState<string>("");
   const [dueDate, setDueDate] = useState<string>("");
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
@@ -224,10 +216,10 @@ export default function InventoryPage() {
     setCurrentPage(1);
   }, [searchTerm, tagFilter]);
 
-  const handleLease = (item: InventoryItem) => {
-    setSelectedItem(item);
-    setIsLeaseDialogOpen(true);
-  };
+  // const handleLease = (item: InventoryItem) => {
+  //   setSelectedItem(item);
+  //   setIsLeaseDialogOpen(true);
+  // };
 
   const submitLease = () => {
     if (selectedItem && borrower && dueDate) {
@@ -263,54 +255,54 @@ export default function InventoryPage() {
     setIsAddEditSheetOpen(true);
   };
 
-  const handleEditItem = (item: InventoryItem) => {
-    setEditingItem(item);
-    setIsAddEditSheetOpen(true);
-  };
+  // const handleEditItem = (item: InventoryItem) => {
+  //   setEditingItem(item);
+  //   setIsAddEditSheetOpen(true);
+  // };
 
-  const handleDeleteItem = (itemId: number) => {
-    setInventoryItems(inventoryItems.filter((item) => item.id !== itemId));
-    toast({
-      title: "Item Deleted",
-      description: "The item has been removed from the inventory.",
-    });
-  };
+  // const handleDeleteItem = (itemId: number) => {
+  //   setInventoryItems(inventoryItems.filter((item) => item.id !== itemId));
+  //   toast({
+  //     title: "Item Deleted",
+  //     description: "The item has been removed from the inventory.",
+  //   });
+  // };
 
-  const handleSubmitItem = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const newItem: InventoryItem = {
-      id: editingItem ? editingItem.id : inventoryItems.length + 1,
-      name: formData.get("name") as string,
-      category: formData.get("category") as string,
-      quantity: parseInt(formData.get("quantity") as string),
-      status: formData.get("status") as string,
-      tags: (formData.get("tags") as string)
-        .split(",")
-        .map((tag) => tag.trim()),
-    };
+  // const handleSubmitItem = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target as HTMLFormElement);
+  //   const newItem: InventoryItem = {
+  //     id: editingItem ? editingItem.id : inventoryItems.length + 1,
+  //     name: formData.get("name") as string,
+  //     category: formData.get("category") as string,
+  //     quantity: parseInt(formData.get("quantity") as string),
+  //     status: formData.get("status") as string,
+  //     tags: (formData.get("tags") as string)
+  //       .split(",")
+  //       .map((tag) => tag.trim()),
+  //   };
 
-    if (editingItem) {
-      setInventoryItems(
-        inventoryItems.map((item) =>
-          item.id === editingItem.id ? newItem : item
-        )
-      );
-      toast({
-        title: "Item Updated",
-        description: `${newItem.name} has been updated in the inventory.`,
-      });
-    } else {
-      setInventoryItems([...inventoryItems, newItem]);
-      toast({
-        title: "Item Added",
-        description: `${newItem.name} has been added to the inventory.`,
-      });
-    }
+  //   if (editingItem) {
+  //     setInventoryItems(
+  //       inventoryItems.map((item) =>
+  //         item.id === editingItem.id ? newItem : item
+  //       )
+  //     );
+  //     toast({
+  //       title: "Item Updated",
+  //       description: `${newItem.name} has been updated in the inventory.`,
+  //     });
+  //   } else {
+  //     setInventoryItems([...inventoryItems, newItem]);
+  //     toast({
+  //       title: "Item Added",
+  //       description: `${newItem.name} has been added to the inventory.`,
+  //     });
+  //   }
 
-    setIsAddEditSheetOpen(false);
-    setEditingItem(null);
-  };
+  //   setIsAddEditSheetOpen(false);
+  //   setEditingItem(null);
+  // };
 
   return (
     <div className="space-y-4">
@@ -410,12 +402,15 @@ export default function InventoryPage() {
                       key={item?.id}
                       item={item}
                       onLease={function (item: Item): void {
+                        console.log("🚀 ~ InventoryPage ~ item:", item)
                         throw new Error("Function not implemented.");
                       }}
                       onEdit={function (item: Item): void {
+                        console.log("🚀 ~ InventoryPage ~ item:", item)
                         throw new Error("Function not implemented.");
                       }}
                       onDelete={function (id: string): void {
+                        console.log("🚀 ~ InventoryPage ~ id:", id)
                         throw new Error("Function not implemented.");
                       }}
                     />

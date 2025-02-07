@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Plus, PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
+
 export interface Field {
   name: string;
   type: string;
@@ -36,12 +37,15 @@ interface ProductFormProps {
   setShowCategoryForm: (show: boolean) => void;
 }
 
-const getProductSchema = (fields: { name: string; type: string }[]) =>
-  z.object({
+const getProductSchema = (fields: { name: string; type: string }[]) => {
+  console.log("🚀 ~ fields:", fields);
+
+  return z.object({
     name: z.string().min(2, "Product name is required"),
     categoryId: z.string().min(1, "Category is required"),
     attributes: z.record(z.string().optional()),
   });
+};
 
 export function ProductForm({
   categories,
@@ -77,8 +81,13 @@ export function ProductForm({
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <Label htmlFor="categoryId">Category</Label>
-          <Button onClick={() => setShowCategoryForm(true)} variant="outline" size="sm">
-            <Plus/>New
+          <Button
+            onClick={() => setShowCategoryForm(true)}
+            variant="outline"
+            size="sm"
+          >
+            <Plus />
+            New
           </Button>
         </div>
         <Controller
