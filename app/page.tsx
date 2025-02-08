@@ -29,7 +29,7 @@ const dashboardData = {
 //   { name: "Apr", total: 134 },
 //   { name: "May", total: 156 },
 //   { name: "Jun", total: 180 },
-//   { name: "Jul", total: 201 },
+//   { name: "Jul", total: 206 },
 // ];
 
 export default async function DashboardPage() {
