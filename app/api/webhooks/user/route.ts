@@ -70,6 +70,11 @@ export async function POST(req: Request) {
 
       break;
     case "user.updated":
+      await clerk.users.updateUser(evt.data.id, {
+        publicMetadata: {
+          role: "user",
+        },
+      });
       updateUser(evt.data);
       break;
 
