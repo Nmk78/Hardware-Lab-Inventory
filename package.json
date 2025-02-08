@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "postinstall": "npx prisma generate",
     "build": "next build",
+    "prebuild":"npx prisma generate",
+    "postinstall": "npx prisma generate",
     "start": "next start",
     "lint": "next lint"
   },
