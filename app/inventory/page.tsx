@@ -42,7 +42,6 @@ import { AnimatedTableRow } from "@/components/AnimatedTableRow";
 import ItemForm from "@/components/ItemForm";
 
 
-// Mock data - in a real app, this would come from your backend
 const initialInventoryItems: Item[] = [
   {
     id: 1,
