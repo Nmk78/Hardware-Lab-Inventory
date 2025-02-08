@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Package, UserPlus,
+  Package,
+  UserPlus,
   CircuitBoard,
   ChevronsRightLeft,
-  Wrench
+  Wrench,
 } from "lucide-react";
 import {
   Sidebar as ShadcnSidebar,
@@ -25,7 +26,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 const menuItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
-  { name: 'Project', href: '/add-item', icon: Wrench },
+  { name: "Project", href: "/add-item", icon: Wrench },
   { name: "Invite User", href: "/invite", icon: UserPlus },
 ];
 
@@ -70,7 +71,10 @@ export function Sidebar() {
         </SidebarContent>
         <SidebarFooter className="border-t p-4">
           <div className="flex jussify-start items-center gap-4">
-            <UserButton /> {user?.fullName}
+            <UserButton />
+            <div className="grid flex-1 text-left text-xl leading-tight">
+              <span className="truncate text-base">{user?.fullName}</span>
+            </div>
           </div>
 
           <p className="text-sm truncate text-gray-500">© 2025 Hardware Lab</p>
