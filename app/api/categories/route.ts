@@ -1,5 +1,5 @@
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
   // Dummy categories with dynamic fields structure
   const dummyCategories = [
     {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-  // Dummy categories with dynamic fields structure
+import prisma from "@/lib/prisma";  // Dummy categories with dynamic fields structure
   const dummyProducts = [
     {
       id: "7551b6f9e2c4d5a8f7e3b2c1",
