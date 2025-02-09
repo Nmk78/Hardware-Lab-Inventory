@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { clerkClient, WebhookEvent } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -56,26 +56,37 @@ export async function POST(req: Request) {
   console.log("Webhook payload:", body);
   const clerk = await clerkClient();
 
-  console.log("userId:", evt.data);
+  console.log("userData from webhook🔥🔥🔥🔥🔥🔥:", evt.data);
 
   switch (eventType) {
     case "user.created":
+      const { id, email_addresses, first_name, last_name, image_url } = evt.data
+
       await clerk.users.updateUser(evt.data.id, {
         publicMetadata: {
           role: "7",
         },
       });
-      createUser(evt.data);
+      const user = {
+        clerkUserId: id,
+        email: email_addresses[0].email_address,
+        ...(first_name ? { firstName: first_name } : {}),
+        ...(last_name ? { lastName: last_name } : {}),
+        ...(image_url ? { imageUrl: image_url } : {})
+      }
+  
+      await createUser(user as User)
       console.log("userId:", evt.data);
 
       break;
     case "user.updated":
+
       await clerk.users.updateUser(evt.data.id, {
         publicMetadata: {
           role: "user",
         },
       });
-      updateUser(evt.data);
+      UpdateUser(id, user as User);
       break;
 
     case "user.deleted":
@@ -90,32 +101,45 @@ export async function POST(req: Request) {
 }
 const prisma = new PrismaClient();
 
-async function createUser(userData: WebhookEvent["data"] & { email_addresses: { email_address: string }[] }) {
+export async function createUser(data: User) {
   try {
-    const { id, email_addresses } = userData;
-    await prisma.user.create({
-      data: {
-        id: id,
-        email: email_addresses[0]?.email_address,
-      },
-    });
+    const user = await prisma.user.create({ data });
+    return { user };
   } catch (error) {
-    console.error("Error creating user:", error);
+    return { error };
   }
 }
 
-async function updateUser(userData: WebhookEvent["data"] & { email_addresses: { email_address: string }[] }) {
+// export async function getUserById({
+//   id,
+//   clerkUserId,
+// }: {
+//   id?: string;
+//   clerkUserId?: string;
+// }) {
+//   try {
+//     if (!id && !clerkUserId) {
+//       throw new Error("id or clerkUserId is required");
+//     }
+
+//     const query = id ? { id } : { clerkUserId };
+
+//     const user = await prisma.user.findUnique({ where: query });
+//     return { user };
+//   } catch (error) {
+//     return { error };
+//   }
+// }
+
+export async function UpdateUser(id: string, data: Partial<User>) {
   try {
-    await prisma.user.update({
-      where: { id: userData.id },
-      data: {
-        email: userData.email_addresses[0]?.email_address + Date.now(),
-        // firstName: userData.first_name,
-        // lastName: userData.last_name,
-      },
+    const user = await prisma.user.update({
+      where: { id },
+      data,
     });
+    return { user };
   } catch (error) {
-    console.error("Error updating user:", error);
+    return { error };
   }
 }
 
