@@ -90,14 +90,13 @@ export async function POST(req: Request) {
 }
 const prisma = new PrismaClient();
 
-async function createUser(userData: WebhookEvent["data"]) {
+async function createUser(userData: WebhookEvent["data"] & { email_addresses: { email_address: string }[] }) {
   try {
+    const { id, email_addresses } = userData;
     await prisma.user.create({
       data: {
-        id: userData.id,
-        email: userData.email_addresses[0]?.email_address,
-        firstName: userData.first_name,
-        lastName: userData.last_name,
+        id: id,
+        email: email_addresses[0]?.email_address,
       },
     });
   } catch (error) {
@@ -105,14 +104,14 @@ async function createUser(userData: WebhookEvent["data"]) {
   }
 }
 
-async function updateUser(userData: WebhookEvent["data"]) {
+async function updateUser(userData: WebhookEvent["data"] & { email_addresses: { email_address: string }[] }) {
   try {
     await prisma.user.update({
       where: { id: userData.id },
       data: {
-        email: userData.email_addresses[0]?.email_address,
-        firstName: userData.first_name,
-        lastName: userData.last_name,
+        email: userData.email_addresses[0]?.email_address + Date.now(),
+        // firstName: userData.first_name,
+        // lastName: userData.last_name,
       },
     });
   } catch (error) {

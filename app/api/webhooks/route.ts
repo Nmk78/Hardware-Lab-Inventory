@@ -61,7 +61,7 @@ const clerk = await clerkClient()
     case "user.updated":
         await clerk.users.updateUser(evt.data.id, {
             publicMetadata: {
-                role:"user"
+                role:"user1"
             },
         })
         break;

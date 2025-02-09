@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "prebuild":"npx prisma generate",
+    "prebuild": "npx prisma generate",
     "postinstall": "npx prisma generate",
     "start": "next start",
     "lint": "next lint"
