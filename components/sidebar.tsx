@@ -21,7 +21,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 
 const menuItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -70,14 +70,20 @@ export function Sidebar() {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="border-t p-4">
-          <div className="flex jussify-start items-center gap-4">
+          <div className="flex jussify-start items-center gap-2">
             <UserButton />
-            <div className="grid flex-1 text-left text-xl leading-tight">
-              <span className="truncate text-base">{user?.fullName}</span>
+            <div className="grid flex-1 text-left text-xl overflow-hidden leading-tight">
+              <OrganizationSwitcher
+                appearance={{
+                  elements: {
+                    organizationPreviewAvatarBox: "size-5",
+                  },
+                }}
+              />
             </div>
           </div>
 
-          <p className="text-sm truncate text-gray-500">© 2025 Hardware Lab</p>
+          <p className="text-sm truncate leading-tight text-gray-500">© 2025 Hardware Lab</p>
         </SidebarFooter>
         <SidebarTrigger className="absolute right-4 top-4 md:hidden" />
       </ShadcnSidebar>

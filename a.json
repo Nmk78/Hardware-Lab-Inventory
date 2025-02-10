@@ -1,0 +1,48 @@
+{
+  "data": {
+    "body": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"></html>",
+    "body_plain": "Your invitation to Hardware Lab Inventory\n\nHardware Lab Inventory\n\nYour .",
+    "data": {
+      "action_url": "https://resolved-hamster-40.clerk.accounts.dev/v1/tickets/accept?ticket=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9",
+      "app": {
+        "domain_name": "resolved.hamster-40.lcl.dev",
+        "logo_image_url": "",
+        "logo_url": null,
+        "name": "Hardware Lab Inventory",
+        "url": "https://resolved-hamster-40.accounts.dev"
+      },
+      "invitation": {
+        "expires_in_days": 30,
+        "public_metadata": {},
+        "public_metadata_fallback": ""
+      },
+      "inviter_name": "Nay Myo Khant",
+      "theme": {
+        "button_text_color": "#ffffff",
+        "primary_color": "#6c47ff",
+        "show_clerk_branding": true
+      }
+    },
+    "delivered_by_clerk": true,
+    "email_address_id": null,
+    "from_email_name": "invitations",
+    "id": "ema_2snKKUFeN4CfBBft5U2kvTlXihi",
+    "object": "email",
+    "reply_to_email_name": null,
+    "slug": "invitation",
+    "status": "queued",
+    "subject": "[Development] Invitation to join Hardware Lab Inventory\n",
+    "to_email_address": "dicog27036@nike4s.com",
+    "user_id": null
+  },
+  "event_attributes": {
+    "http_request": {
+      "client_ip": "",
+      "user_agent": "clerk/clerk-sdk-go@v3.0.0"
+    }
+  },
+  "instance_id": "ins_2rZ84RkxpB71RYch1GHqkjdoSWB",
+  "object": "event",
+  "timestamp": 1739085834096,
+  "type": "email.created"
+}
