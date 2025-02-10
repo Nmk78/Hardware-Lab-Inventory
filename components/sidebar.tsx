@@ -4,11 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Package,
-  UserPlus,
-  CircuitBoard,
+  Package, CircuitBoard,
   ChevronsRightLeft,
-  Wrench,
+  Wrench
 } from "lucide-react";
 import {
   Sidebar as ShadcnSidebar,
@@ -27,7 +25,6 @@ const menuItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Project", href: "/add-item", icon: Wrench },
-  { name: "Invite User", href: "/invite", icon: UserPlus },
 ];
 
 export function Sidebar() {

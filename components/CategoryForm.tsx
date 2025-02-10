@@ -11,30 +11,22 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-export interface Field {
-  name: string;
-  type: "text" | "number" | "select";
-  required: boolean;
-}
+import { attributeDefinitions, Category } from "@/lib/type";
 
-export interface Category {
-  name: string;
-  fields: Field[];
-}
 
 interface CategoryFormProps {
-  onSave: (category: Omit<Category, "id">) => void;
+  onSave: (category: Category) => void;
 }
 
 export function CategoryForm({ onSave }: CategoryFormProps) {
-  const [fields, setFields] = useState<Field[]>([]);
+  const [fields, setFields] = useState<attributeDefinitions[]>([]);
   const [categoryName, setCategoryName] = useState("");
 
   const addField = () => {
     setFields([...fields, { name: "", type: "text", required: false }]);
   };
 
-  const updateField = (index: number, key: keyof Field, value: string | boolean) => {
+  const updateField = (index: number, key: keyof attributeDefinitions, value: string | boolean) => {
     const updated = [...fields];
     updated[index] = { ...updated[index], [key]: value };
     setFields(updated);

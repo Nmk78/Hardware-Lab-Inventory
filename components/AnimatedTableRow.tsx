@@ -104,39 +104,40 @@ export function AnimatedTableRow({
             `}
           >
             <div className="overflow-hidden">
-              <div className="p-4 flex gap-4 items-start">
+                <div className="p-4 flex gap-4 items-start">
                 <Image
                   width={100}
+                  height={100}
                   src={`/images/${(item.name as string).toLowerCase()}.jpg`}
                   alt={item.name as string}
                   className="w-32 h-32 object-cover rounded-lg shadow-md
-                           transition-transform duration-300 hover:scale-105"
+                       transition-transform duration-300 hover:scale-105"
                 />
                 <div className="flex flex-col space-y-2 opacity-0 animate-in fade-in duration-500">
                   <p>
-                    <strong>Description:</strong> Detailed description of{" "}
-                    {item.name as string}.
+                  <strong>Description:</strong> Detailed description of{" "}
+                  {item.name as string}.
                   </p>
                   <p>
-                    <strong>Additional Info:</strong> Any other relevant
-                    information.
+                  <strong>Additional Info:</strong> Any other relevant
+                  information.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <div className="flex items-center">
-                      <strong>Price:</strong>
-                      <span className="ml-1">${item.price as string}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <strong>Location:</strong>
-                      <span className="ml-1">{item.location as string}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <strong>Condition:</strong>
-                      <span className="ml-1">{item.condition as string}</span>
-                    </div>
+                  <div className="flex items-center">
+                    <strong>Price:</strong>
+                    <span className="ml-1">${item.price as string}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <strong>Location:</strong>
+                    <span className="ml-1">{item.location as string}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <strong>Condition:</strong>
+                    <span className="ml-1">{item.condition as string}</span>
+                  </div>
                   </div>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
         </TableCell>

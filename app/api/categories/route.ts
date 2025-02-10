@@ -1,5 +1,6 @@
 // import prisma from "@/lib/prisma";
-import { prisma } from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
   // Dummy categories with dynamic fields structure
   const dummyCategories = [
@@ -41,11 +42,24 @@ export async function GET() {
   
 export async function POST(req: NextRequest) {
   try {
-    const { name, fields } = await req.json();
+    const body = await req.json();
+    console.log("🚀 ~ POST ~ body:", body)
+    if (!body) {
+      return NextResponse.json({ message: "Invalid JSON payload" }, { status: 400 });
+    }
+    const { name, fields } = body;
 
+    console.log("🚀 ~ POST ~ name, fields:", name, fields)
+    if(!name || !fields) {
+      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+    }
     const category = await prisma.category.create({
-      data: { name, fields },
+      data: { name, attributeDefinitions: fields },
+    }).catch(error => {
+      console.error("Prisma error:", error);
+      throw new Error("Database error");
     });
+    console.log("🚀 ~ POST ~ category:", category)
 
     return NextResponse.json({ message: "Category created", category });
   } catch (error) {
@@ -55,7 +69,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     const { id } = await req.json();
-    const productCount = await prisma.product.count({ where: { categoryId: id } });
+    const productCount = await prisma.category.count({ where: { id } });
   
     if (productCount > 0) {
       return NextResponse.json({ message: "Cannot delete: Products exist" }, { status: 400 });

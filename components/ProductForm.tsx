@@ -12,24 +12,10 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { Category, ProductFormValues } from "@/lib/type";
 
-export interface Field {
-  name: string;
-  type: string;
-  required: boolean;
-}
 
-export interface Category {
-  id: string;
-  name: string;
-  fields: Field[];
-}
 
-export interface ProductFormValues {
-  name: string;
-  categoryId: string;
-  attributes: Record<string, string>;
-}
 
 interface ProductFormProps {
   categories: Category[];
