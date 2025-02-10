@@ -33,9 +33,9 @@ const dummyCategories = [
 ];
 
 export async function GET() {
-  // const categories = await prisma.category.findMany();
-  // return NextResponse.json(categories);
-  return NextResponse.json(dummyCategories);
+  const categories = await prisma.category.findMany();
+  return NextResponse.json(categories);
+  // return NextResponse.json(dummyCategories);
 }
 
 export async function POST(req: NextRequest) {
